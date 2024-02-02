@@ -11,6 +11,7 @@ import { SiRazer, SiShopee } from 'react-icons/si'
 import { TbBrandProducthunt } from 'react-icons/tb'
 import { VscFeedback } from 'react-icons/vsc'
 import { Outlet, useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 const { Header, Sider, Content } = Layout
 
@@ -20,6 +21,8 @@ const MainLayout = () => {
     token: { colorBgContainer }
   } = theme.useToken()
   const navigate = useNavigate()
+
+  const { user } = useSelector((state) => state.auth)
 
   return (
     <Layout>
@@ -220,8 +223,8 @@ const MainLayout = () => {
                 />
               </div>
               <div>
-                <h5 className="mb-0">Nguyen Quang Huy</h5>
-                <p className="mb-0">kaisa13102004@gmail.com</p>
+                <h5 className="mb-0">{user?.userName}</h5>
+                <p className="mb-0">{user?.userEmail}</p>
               </div>
             </div>
           </div>
