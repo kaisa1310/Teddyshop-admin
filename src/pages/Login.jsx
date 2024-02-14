@@ -27,17 +27,17 @@ const Login = () => {
     }
   })
 
-  const { user, isLoading, isError, isSucess } = useSelector((state) => state.auth)
+  const { user, isLoading, isError, isSuccess } = useSelector((state) => state.auth)
 
   useEffect(() => {
-    if (user !== null || isSucess) {
+    if (isSuccess) {
       navigate('/admin')
       toast.success('Đăng nhập thành công')
     }
     if (isError) {
       toast.error('Đăng nhập thất bại')
     }
-  }, [user, isLoading, isError, isSucess, navigate])
+  }, [user, isLoading, isError, isSuccess, navigate])
 
   return (
     <div className="py-5" style={{ background: '#ffd333', minHeight: '100vh' }}>
