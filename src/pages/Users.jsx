@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import CustomModal from '../components/CustomModal'
 import CustomInput from '../components/CustomInput'
 import { authApis } from '../apis'
-import moment from 'moment'
+// import moment from 'moment'
 
 const columns = [
   {
@@ -35,12 +35,9 @@ const columns = [
   }
 ]
 
-const Users = () => {
-  const role = 'admin'
-  let tableData = []
+let tableData = []
 
-  const [userData, setUserData] = useState([])
-  const [userId, setUserId] = useState('')
+const Users = () => {
   const [open, setOpen] = useState(false)
 
   const hideModal = () => {
@@ -48,39 +45,30 @@ const Users = () => {
   }
 
   const fetchData = async () => {
-    const data = await authApis.getAllUser(role)
+    const data = await authApis.
     setUserData(data)
-  }
-
-  const deleteUser = async (userId) => {
-    await authApis.deleteUser(userId)
-    setOpen(false)
-    setTimeout(() => {
-      fetchData()
-    }, 2000)
   }
 
   useEffect(() => {
     fetchData()
   }, [])
 
-  for (let i = 0; i < userData?.length; i++) {
+  for (let i = 0; i < 20; i++) {
     tableData.push({
       key: i,
-      name: userData[i].fullName,
-      email: userData[i].email,
-      phone: userData[i].phone || 'Chưa cập nhật',
-      created: moment(userData[i].createdAt).format('DD/MM/YYYY'),
+      name: 'Nguyễn Văn A',
+      email: 'email@gmail.com',
+      phone: 'Phone Number' || 'Chưa cập nhật',
+      created: '14 - 02 - 2024',
       action: (
         <div className="d-flex">
-          <Link to={`edit-user/${userData[i]._id}`} className=" fs-3 text-warning">
+          <Link to={`edit-user/`} className=" fs-3 text-warning">
             <BiEdit />
           </Link>
           <button
             className="ms-3 fs-3 text-danger bg-transparent border-0"
             onClick={() => {
               setOpen(true)
-              setUserId(userData[i]._id)
             }}
           >
             <AiFillDelete />
@@ -101,7 +89,7 @@ const Users = () => {
         open={open}
         hideModal={hideModal}
         performAction={() => {
-          deleteUser(userId)
+          
         }}
         content="Bạn có chắc chắn muốn xóa người dùng này ?"
       />
