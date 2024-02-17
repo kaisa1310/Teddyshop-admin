@@ -33,9 +33,9 @@ const Login = () => {
     if (isSuccess) {
       navigate('/admin')
       toast.success('Đăng nhập thành công')
-    }
-    if (isError) {
-      toast.error('Đăng nhập thất bại')
+    } else {
+      navigate('/')
+      // toast.error('Đăng nhập thất bại, vui lòng thử lại!')
     }
   }, [user, isLoading, isError, isSuccess, navigate])
 

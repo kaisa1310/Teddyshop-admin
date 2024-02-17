@@ -1,10 +1,13 @@
 import { Table } from 'antd'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AiFillDelete } from 'react-icons/ai'
 import { BiEdit } from 'react-icons/bi'
 import { Link } from 'react-router-dom'
 import CustomModal from '../components/CustomModal'
 import CustomInput from '../components/CustomInput'
+import { useDispatch, useSelector } from 'react-redux'
+import { getAdmins, resetState } from '../features/members/memberSlice'
+import moment from 'moment'
 
 const columns = [
   {
@@ -32,9 +35,9 @@ const columns = [
     dataIndex: 'action'
   }
 ]
-let data1 = []
 
 const ManagerAdmin = () => {
+  const dispatch = useDispatch()
   const [open, setOpen] = useState(false)
 
   const hideModal = () => {
@@ -46,13 +49,21 @@ const ManagerAdmin = () => {
     setOpen(false)
   }
 
-  for (let i = 0; i < 20; i++) {
+  useEffect(() => {
+    dispatch(resetState())
+    dispatch(getAdmins())
+  }, [dispatch])
+
+  const adminState = useSelector((state) => state.member?.admins?.users)
+  let data1 = []
+
+  for (let i = 0; i < adminState?.length; i++) {
     data1.push({
       key: i + 1,
-      name: 'Nguyen Quang Huy',
-      email: 'huynq13102004@gmail.com',
-      phone: '123456789',
-      created: '12/12/2023',
+      name: adminState[i].fullName,
+      email: adminState[i].email,
+      phone: adminState[i].phoneNumber || 'Chưa cập nhật',
+      created: moment(adminState[i].createdAt).format('DD/MM/YYYY'),
       action: (
         <div className="d-flex">
           <Link to={``} className=" fs-3 text-warning">

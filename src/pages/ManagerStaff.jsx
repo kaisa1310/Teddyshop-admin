@@ -1,10 +1,13 @@
 import { Table } from 'antd'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AiFillDelete } from 'react-icons/ai'
 import { BiEdit } from 'react-icons/bi'
 import { Link } from 'react-router-dom'
 import CustomModal from '../components/CustomModal'
 import CustomInput from '../components/CustomInput'
+import { useDispatch, useSelector } from 'react-redux'
+import { deleteMember, getMembers, resetState } from '../features/members/memberSlice'
+import moment from 'moment'
 
 const columns = [
   {
@@ -36,34 +39,54 @@ const columns = [
     dataIndex: 'action'
   }
 ]
-let data1 = []
 
 const ManagerStaff = () => {
+  const dispatch = useDispatch()
+  const [staffId, setStaffId] = useState('')
   const [open, setOpen] = useState(false)
+
+  const showModal = (e) => {
+    setOpen(true)
+    setStaffId(e)
+  }
 
   const hideModal = () => {
     setOpen(false)
   }
 
   const deleteStaff = () => {
-    // do something
+    dispatch(deleteMember(staffId))
     setOpen(false)
+    setTimeout(() => {
+      dispatch(getMembers())
+    }, 1000)
   }
 
-  for (let i = 0; i < 20; i++) {
+  useEffect(() => {
+    dispatch(getMembers())
+    dispatch(resetState())
+  }, [dispatch])
+
+  const memberState = useSelector((state) => state.member?.members?.members)
+  let data1 = []
+
+  for (let i = 0; i < memberState?.length; i++) {
     data1.push({
       key: i + 1,
-      name: 'Nguyen Quang Huy',
-      email: 'huynq13102004@gmail.com',
-      phone: '123456789',
-      position: 'Nhân viên bán hàng',
-      created: '12/12/2023',
+      name: memberState[i].fullName,
+      email: memberState[i].email,
+      phone: memberState[i].phoneNumber || 'Chưa cập nhật',
+      position: memberState[i].position,
+      created: moment(memberState[i].createdAt).format('DD/MM/YYYY'),
       action: (
         <div className="d-flex">
-          <Link to={``} className=" fs-3 text-warning">
+          <Link to={`/admin/edit-member/${memberState[i]._id}`} className=" fs-3 text-warning">
             <BiEdit />
           </Link>
-          <button className="ms-3 fs-3 text-danger bg-transparent border-0" onClick={() => setOpen(true)}>
+          <button
+            className="ms-3 fs-3 text-danger bg-transparent border-0"
+            onClick={() => showModal(memberState[i]._id)}
+          >
             <AiFillDelete />
           </button>
         </div>
@@ -81,7 +104,7 @@ const ManagerStaff = () => {
         open={open}
         hideModal={hideModal}
         performAction={() => {
-          deleteStaff()
+          deleteStaff(staffId)
         }}
         content="Bạn có chắc chắn muốn xóa người dùng này ?"
       />

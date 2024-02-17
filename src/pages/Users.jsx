@@ -1,11 +1,11 @@
 import { Table } from 'antd'
+import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { AiFillDelete } from 'react-icons/ai'
-import { BiEdit } from 'react-icons/bi'
-import { Link } from 'react-router-dom'
-import CustomModal from '../components/CustomModal'
+import { useDispatch, useSelector } from 'react-redux'
 import CustomInput from '../components/CustomInput'
-import { authApis } from '../apis'
+import CustomModal from '../components/CustomModal'
+import { getUsers, resetState } from '../features/members/memberSlice'
 // import moment from 'moment'
 
 const columns = [
@@ -22,10 +22,6 @@ const columns = [
     dataIndex: 'email'
   },
   {
-    title: 'Số điện thoại',
-    dataIndex: 'phone'
-  },
-  {
     title: 'Ngày tạo',
     dataIndex: 'created'
   },
@@ -35,36 +31,30 @@ const columns = [
   }
 ]
 
-let tableData = []
-
 const Users = () => {
+  const dispatch = useDispatch()
   const [open, setOpen] = useState(false)
 
   const hideModal = () => {
     setOpen(false)
   }
 
-  const fetchData = async () => {
-    const data = await authApis.
-    setUserData(data)
-  }
-
   useEffect(() => {
-    fetchData()
-  }, [])
+    dispatch(resetState())
+    dispatch(getUsers())
+  }, [dispatch])
 
-  for (let i = 0; i < 20; i++) {
+  const usersState = useSelector((state) => state.member?.users?.users)
+  const tableData = []
+
+  for (let i = 0; i < usersState?.length; i++) {
     tableData.push({
-      key: i,
-      name: 'Nguyễn Văn A',
-      email: 'email@gmail.com',
-      phone: 'Phone Number' || 'Chưa cập nhật',
-      created: '14 - 02 - 2024',
+      key: i + 1,
+      name: usersState[i].fullName,
+      email: usersState[i].email,
+      created: moment(usersState[i].createdAt).format('DD/MM/YYYY'),
       action: (
         <div className="d-flex">
-          <Link to={`edit-user/`} className=" fs-3 text-warning">
-            <BiEdit />
-          </Link>
           <button
             className="ms-3 fs-3 text-danger bg-transparent border-0"
             onClick={() => {
@@ -88,9 +78,7 @@ const Users = () => {
       <CustomModal
         open={open}
         hideModal={hideModal}
-        performAction={() => {
-          
-        }}
+        performAction={() => {}}
         content="Bạn có chắc chắn muốn xóa người dùng này ?"
       />
     </div>

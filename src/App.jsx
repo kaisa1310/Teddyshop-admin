@@ -37,6 +37,7 @@ function App() {
           <Route path="manager-admin" element={<ManagerAdmin />} />
           <Route path="manager-staff" element={<ManagerStaff />} />
           <Route path="add-member" element={<AddMember />} />
+          <Route path="edit-member/:id" element={<AddMember />} />
           <Route path="brand-list" element={<BrandList />} />
           <Route path="brand-add" element={<AddBrand />} />
           <Route path="product-list" element={<Products />} />
