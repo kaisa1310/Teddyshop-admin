@@ -40,10 +40,12 @@ function App() {
           <Route path="edit-member/:id" element={<AddMember />} />
           <Route path="brand-list" element={<BrandList />} />
           <Route path="brand-add" element={<AddBrand />} />
+          <Route path="brand-edit/:id" element={<AddBrand />} />
           <Route path="product-list" element={<Products />} />
           <Route path="product-add" element={<AddProduct />} />
           <Route path="procat-list" element={<ProcatList />} />
           <Route path="procat-add" element={<AddProcat />} />
+          <Route path="procat-edit/:id" element={<AddProcat />} />
           <Route path="order-list" element={<Orders />} />
           <Route path="blog-category-list" element={<BlogCatList />} />
           <Route path="blog-category-add" element={<AddBlogCat />} />

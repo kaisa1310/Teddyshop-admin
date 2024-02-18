@@ -137,7 +137,6 @@ const AddMember = () => {
       if (memberId !== undefined) {
         let formattedDate = dayjs(values.startWorkingDate).format('MM/DD/YYYY')
         let formattedEndDate = dayjs(values.endWorkingDate).format('MM/DD/YYYY')
-        console.log(formattedDate, formattedEndDate)
         const memberData = {
           id: memberId,
           ...values,

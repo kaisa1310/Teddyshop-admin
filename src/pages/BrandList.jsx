@@ -1,9 +1,11 @@
 import { Table } from 'antd'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AiFillDelete } from 'react-icons/ai'
 import { BiEdit } from 'react-icons/bi'
 import { Link } from 'react-router-dom'
 import CustomModal from '../components/CustomModal'
+import { useDispatch, useSelector } from 'react-redux'
+import { getBrands, resetState, deleteBrand } from '../features/brand/brandSlice'
 
 const columns = [
   {
@@ -36,39 +38,61 @@ const columns = [
     dataIndex: 'action'
   }
 ]
-let data1 = []
 
 const BrandList = () => {
+  const dispatch = useDispatch()
   const [open, setOpen] = useState(false)
+  const [brandId, setBrandId] = useState('')
+
+  const showModal = (brandId) => {
+    setOpen(true)
+    setBrandId(brandId)
+  }
 
   const hideModal = () => {
     setOpen(false)
   }
 
-  const deleteBrand = () => {
-    // do something
+  const deleteProBrand = () => {
+    dispatch(deleteBrand(brandId))
     setOpen(false)
+    setTimeout(() => {
+      dispatch(getBrands())
+    }, 1000)
   }
 
-  for (let i = 0; i < 20; i++) {
+  useEffect(() => {
+    dispatch(resetState())
+    dispatch(getBrands())
+  }, [])
+
+  const brandsState = useSelector((state) => state.brand?.brands)
+  let data1 = []
+
+  for (let i = 0; i < brandsState?.length; i++) {
     data1.push({
       key: i + 1,
-      name: 'Razer',
-      logo: (
+      name: brandsState[i].name,
+      logo: brandsState[i].logo ? (
+        <img src={brandsState[i].logo?.url} alt="logo" style={{ borderRadius: '50%', objectFit: 'cover' }} />
+      ) : (
         <img
           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHJflBYqkDr--1vpqgN4fmrVcCmm6uXaeRRAmn_xowrA&s"
           alt="logo"
         />
       ),
-      proCat: 'Quan ao',
-      active: 'Active',
-      totalPro: 20,
+      proCat: brandsState[i].productCategory.map((item) => <li key={item._id}>{item.name}</li>),
+      active: brandsState[i].isActive === true ? 'Đang hoạt động' : 'Dừng hoạt động',
+      totalPro: brandsState[i].totalProducts,
       action: (
         <div className="d-flex">
-          <Link to={``} className=" fs-3 text-warning">
+          <Link to={`/admin/brand-edit/${brandsState[i]._id}`} className=" fs-3 text-warning">
             <BiEdit />
           </Link>
-          <button className="ms-3 fs-3 text-danger bg-transparent border-0" onClick={() => setOpen(true)}>
+          <button
+            className="ms-3 fs-3 text-danger bg-transparent border-0"
+            onClick={() => showModal(brandsState[i]._id)}
+          >
             <AiFillDelete />
           </button>
         </div>
@@ -84,7 +108,7 @@ const BrandList = () => {
         open={open}
         hideModal={hideModal}
         performAction={() => {
-          deleteBrand()
+          deleteProBrand(brandId)
         }}
         content="Bạn có muốn xóa hãng này khỏi danh sách không ?"
       />
