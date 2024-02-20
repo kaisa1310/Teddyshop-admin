@@ -5,6 +5,8 @@ import uploadSlice from '../features/upload/uploadSlice'
 import procatSlice from '../features/procat/procatSlice'
 import brandSlice from '../features/brand/brandSlice'
 import productSlice from '../features/product/productSlice'
+import blogCatSlice from '../features/blogcat/blogcatSlice'
+import blogSlice from '../features/blog/blogSlice'
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +15,8 @@ export const store = configureStore({
     upload: uploadSlice,
     procat: procatSlice,
     brand: brandSlice,
-    product: productSlice
+    product: productSlice,
+    blogCat: blogCatSlice,
+    blog: blogSlice
   }
 })

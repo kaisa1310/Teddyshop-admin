@@ -50,8 +50,10 @@ function App() {
           <Route path="order-list" element={<Orders />} />
           <Route path="blog-category-list" element={<BlogCatList />} />
           <Route path="blog-category-add" element={<AddBlogCat />} />
+          <Route path="blog-category-edit/:id" element={<AddBlogCat />} />
           <Route path="blog-list" element={<Blogs />} />
           <Route path="blog-add" element={<AddBlog />} />
+          <Route path="blog-edit/:id" element={<AddBlog />} />
           <Route path="event-list" element={<Events />} />
           <Route path="event-add" element={<AddEvent />} />
           <Route path="feedbacks" element={<Feedbacks />} />

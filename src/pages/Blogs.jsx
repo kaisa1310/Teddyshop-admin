@@ -1,9 +1,11 @@
 import { Table } from 'antd'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AiFillDelete } from 'react-icons/ai'
 import { BiEdit } from 'react-icons/bi'
 import { Link } from 'react-router-dom'
 import CustomModal from '../components/CustomModal'
+import { useDispatch, useSelector } from 'react-redux'
+import { getBlogs, resetState, deleteBlog as removeBlog } from '../features/blog/blogSlice'
 
 const columns = [
   {
@@ -36,34 +38,52 @@ const columns = [
     dataIndex: 'action'
   }
 ]
-let data1 = []
 
 const Blogs = () => {
+  const dispatch = useDispatch()
   const [open, setOpen] = useState(false)
+  const [blogId, setBlogId] = useState('')
+
+  const showModal = (blogId) => {
+    setOpen(true)
+    setBlogId(blogId)
+  }
 
   const hideModal = () => {
     setOpen(false)
   }
 
-  const deleteBlog = () => {
-    // do something
+  const deleteBlog = (id) => {
+    dispatch(removeBlog(id))
     setOpen(false)
+    setTimeout(() => {
+      dispatch(getBlogs())
+    }, 1000)
   }
 
-  for (let i = 0; i < 20; i++) {
+  useEffect(() => {
+    dispatch(resetState())
+    dispatch(getBlogs())
+  }, [])
+
+  const blogState = useSelector((state) => state.blog?.blogs)
+
+  let data1 = []
+
+  for (let i = 0; i < blogState.length; i++) {
     data1.push({
       key: i + 1,
-      name: 'Bàn phím cơ Razer BlackWidow V3 Mini HyperSpeed - Mercury White (RZ03-03540100-R3M1)',
-      category: 'Công nghệ',
-      tag: 'Gaming',
-      author: ' Nguyen Quang Huy',
-      view: 100,
+      name: blogState[i].name,
+      category: blogState[i].blogCategory.name,
+      tag: blogState[i].tag,
+      author: blogState[i].createdBy.fullName,
+      view: blogState[i].views,
       action: (
         <div className="d-flex">
-          <Link to={``} className=" fs-3 text-warning">
+          <Link to={`/admin/blog-edit/${blogState[i]._id}`} className=" fs-3 text-warning">
             <BiEdit />
           </Link>
-          <button className="ms-3 fs-3 text-danger bg-transparent border-0" onClick={() => setOpen(true)}>
+          <button className="ms-3 fs-3 text-danger bg-transparent border-0" onClick={() => showModal(blogState[i]._id)}>
             <AiFillDelete />
           </button>
         </div>
@@ -79,7 +99,7 @@ const Blogs = () => {
         open={open}
         hideModal={hideModal}
         performAction={() => {
-          deleteBlog()
+          deleteBlog(blogId)
         }}
         content="Bạn có muốn xóa bài viết không ?"
       />
