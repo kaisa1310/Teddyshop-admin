@@ -62,6 +62,31 @@ export const deleteProcat = createAsyncThunk('procat/deleteProcat', async (id, t
   }
 })
 
+export const addProductToCategory = createAsyncThunk('procat/addProductToCategory', async (proCatData, thunkAPI) => {
+  try {
+    return await procatService.addProductToCategory({
+      proCatId: proCatData?.catId,
+      productId: proCatData?.productId
+    })
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error)
+  }
+})
+
+export const removeProductToCategory = createAsyncThunk(
+  'procat/removeProductToCategory',
+  async (proCatData, thunkAPI) => {
+    try {
+      return await procatService.removeProductFromCategory({
+        proCatId: proCatData?.catId,
+        productId: proCatData?.productId
+      })
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error)
+    }
+  }
+)
+
 export const resetState = createAction('ReverAll')
 
 export const procatSlice = createSlice({
@@ -128,6 +153,28 @@ export const procatSlice = createSlice({
         state.deletedProcat = action.payload
       })
       .addCase(deleteProcat.rejected, (state) => {
+        state.isError = true
+      })
+      .addCase(addProductToCategory.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(addProductToCategory.fulfilled, (state) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.isError = false
+      })
+      .addCase(addProductToCategory.rejected, (state) => {
+        state.isError = true
+      })
+      .addCase(removeProductToCategory.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(removeProductToCategory.fulfilled, (state) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.isError = false
+      })
+      .addCase(removeProductToCategory.rejected, (state) => {
         state.isError = true
       })
       .addCase(resetState, () => initialState)

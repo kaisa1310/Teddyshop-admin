@@ -74,7 +74,11 @@ const BrandList = () => {
       key: i + 1,
       name: brandsState[i].name,
       logo: brandsState[i].logo ? (
-        <img src={brandsState[i].logo?.url} alt="logo" style={{ borderRadius: '50%', objectFit: 'cover' }} />
+        <img
+          src={brandsState[i].logo?.url}
+          alt="logo"
+          style={{ borderRadius: '50%', objectFit: 'cover', width: '50px', height: '50px' }}
+        />
       ) : (
         <img
           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHJflBYqkDr--1vpqgN4fmrVcCmm6uXaeRRAmn_xowrA&s"
@@ -83,7 +87,7 @@ const BrandList = () => {
       ),
       proCat: brandsState[i].productCategory.map((item) => <li key={item._id}>{item.name}</li>),
       active: brandsState[i].isActive === true ? 'Đang hoạt động' : 'Dừng hoạt động',
-      totalPro: brandsState[i].totalProducts,
+      totalPro: brandsState[i].totalProduct,
       action: (
         <div className="d-flex">
           <Link to={`/admin/brand-edit/${brandsState[i]._id}`} className=" fs-3 text-warning">

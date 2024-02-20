@@ -43,6 +43,7 @@ function App() {
           <Route path="brand-edit/:id" element={<AddBrand />} />
           <Route path="product-list" element={<Products />} />
           <Route path="product-add" element={<AddProduct />} />
+          <Route path="product-edit/:id" element={<AddProduct />} />
           <Route path="procat-list" element={<ProcatList />} />
           <Route path="procat-add" element={<AddProcat />} />
           <Route path="procat-edit/:id" element={<AddProcat />} />

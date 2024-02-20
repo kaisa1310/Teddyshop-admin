@@ -30,7 +30,7 @@ const AddBrand = () => {
   // get product categories
   useEffect(() => {
     dispatch(getProcats())
-  }, [dispatch])
+  }, [])
 
   const productcats = useSelector((state) => state.procat?.procats)
   let productCatsOptions = []
@@ -48,15 +48,22 @@ const AddBrand = () => {
   }
 
   // upload logo
-  const logoState = useSelector((state) => state.upload?.images)
+  const imagesState = useSelector((state) => state.upload?.images)
   let imageLogo = {}
-  logoState.forEach((image) => {
-    imageLogo.public_id = image.public_id
-    imageLogo.url = image.url
+  let thumbnail = {}
+  imagesState.forEach((image, index) => {
+    if (index === 0) {
+      imageLogo.public_id = image.public_id
+      imageLogo.url = image.url
+    } else {
+      thumbnail.public_id = image.public_id
+      thumbnail.url = image.url
+    }
   })
   useEffect(() => {
     formik.setFieldValue('logo', imageLogo)
-  }, [logoState])
+    formik.setFieldValue('thumbnail', thumbnail)
+  }, [imagesState])
 
   // toast message
   const newBrand = useSelector((state) => state.brand)
@@ -85,6 +92,7 @@ const AddBrand = () => {
       name: brand.name || '',
       description: brand.description || '',
       logo: brand.logo || {},
+      thumbnail: brand.thumbnail || {},
       productCategory: brand.productCategory || []
     },
     validationSchema: schema,
@@ -97,6 +105,7 @@ const AddBrand = () => {
         }, 1000)
       } else {
         dispatch(createBrand(values))
+        dispatch(resetState())
         formik.resetForm()
       }
     }
@@ -165,7 +174,7 @@ const AddBrand = () => {
                 style={{
                   width: '140px',
                   height: '140px',
-                  objectFit: 'cover',
+                  objectFit: 'contain',
                   borderRadius: '4px'
                 }}
                 src={formik.values.logo?.url}
@@ -173,6 +182,41 @@ const AddBrand = () => {
               />
               <div
                 onClick={() => dispatch(deleteImage(formik.values.logo?.public_id))}
+                style={{ position: 'absolute', right: '0', top: '-5px', fontSize: '20px', cursor: 'pointer' }}
+              >
+                <IoMdClose />
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="d-flex gap-4">
+          <div className="bg-white border-1 p-5 text-center w-50 rounded" style={{ cursor: 'pointer' }}>
+            <Dropzone onDrop={(acceptedFiles) => dispatch(uploadImage(acceptedFiles))}>
+              {({ getRootProps, getInputProps }) => (
+                <section>
+                  <div {...getRootProps()}>
+                    <input {...getInputProps()} />
+                    <p>Chọn ảnh nền cho thương hiệu</p>
+                  </div>
+                </section>
+              )}
+            </Dropzone>
+          </div>
+          {Object.keys(formik.values.thumbnail).length > 0 && (
+            <div style={{ position: 'relative' }}>
+              <img
+                style={{
+                  width: 'auto',
+                  height: '140px',
+                  objectFit: 'cover',
+                  borderRadius: '4px'
+                }}
+                src={formik.values.thumbnail?.url}
+                alt="avatar"
+              />
+              <div
+                onClick={() => dispatch(deleteImage(formik.values.thumbnail?.public_id))}
                 style={{ position: 'absolute', right: '0', top: '-5px', fontSize: '20px', cursor: 'pointer' }}
               >
                 <IoMdClose />

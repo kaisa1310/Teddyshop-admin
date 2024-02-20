@@ -20,8 +20,8 @@ const CustomInput = (props) => {
 }
 
 CustomInput.propTypes = {
-  type: PropTypes.string.isRequired,
-  value: PropTypes.string,
+  type: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   label: PropTypes.string,
   i_id: PropTypes.string,
   i_class: PropTypes.string,

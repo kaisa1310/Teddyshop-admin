@@ -36,7 +36,8 @@ export const createBrand = createAsyncThunk('brand/createBrand', async (brandDat
       name: brandData?.name,
       description: brandData?.description,
       logo: brandData?.logo,
-      productCategory: brandData?.productCategory
+      productCategory: brandData?.productCategory,
+      thumbnail: brandData?.thumbnail
     })
   } catch (error) {
     return thunkAPI.rejectWithValue(error)
@@ -49,7 +50,8 @@ export const updateBrand = createAsyncThunk('brand/updateBrand', async (brandDat
       name: brandData?.name,
       description: brandData?.description,
       logo: brandData?.logo,
-      productCategory: brandData?.productCategory
+      productCategory: brandData?.productCategory,
+      thumbnail: brandData?.thumbnail
     })
   } catch (error) {
     return thunkAPI.rejectWithValue(error)
@@ -59,6 +61,28 @@ export const updateBrand = createAsyncThunk('brand/updateBrand', async (brandDat
 export const deleteBrand = createAsyncThunk('brand/deleteBrand', async (id, thunkAPI) => {
   try {
     return await brandService.deleteBrand(id)
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error)
+  }
+})
+
+export const addProductToBrand = createAsyncThunk('brand/addProductToBrand', async (brandData, thunkAPI) => {
+  try {
+    return await brandService.addProductToBrand({
+      brandId: brandData.brandId,
+      productId: brandData?.productId
+    })
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error)
+  }
+})
+
+export const removeProductFromBrand = createAsyncThunk('brand/removeProductToBrand', async (brandData, thunkAPI) => {
+  try {
+    return await brandService.removeProductFromBrand({
+      brandId: brandData.brandId,
+      productId: brandData?.productId
+    })
   } catch (error) {
     return thunkAPI.rejectWithValue(error)
   }
@@ -130,6 +154,28 @@ export const brandSlice = createSlice({
         state.deletedBrand = action.payload
       })
       .addCase(deleteBrand.rejected, (state) => {
+        state.isError = true
+      })
+      .addCase(addProductToBrand.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(addProductToBrand.fulfilled, (state) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.isError = false
+      })
+      .addCase(addProductToBrand.rejected, (state) => {
+        state.isError = true
+      })
+      .addCase(removeProductFromBrand.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(removeProductFromBrand.fulfilled, (state) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.isError = false
+      })
+      .addCase(removeProductFromBrand.rejected, (state) => {
         state.isError = true
       })
       .addCase(resetState, () => initialState)

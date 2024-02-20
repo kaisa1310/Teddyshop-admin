@@ -41,10 +41,28 @@ const deleteBrand = async (id) => {
   }
 }
 
+const addProductToBrand = async (brandData) => {
+  const response = await axios.put(`${base_url}brand/addProductToBrand`, brandData)
+
+  if (response.status === 200) {
+    return response.data
+  }
+}
+
+const removeProductFromBrand = async (brandData) => {
+  const response = await axios.put(`${base_url}brand/removeProductFromBrand`, brandData)
+
+  if (response.status === 200) {
+    return response.data
+  }
+}
+
 export const brandService = {
   getBrands,
   getBrandById,
   createBrand,
   updateBrand,
-  deleteBrand
+  deleteBrand,
+  addProductToBrand,
+  removeProductFromBrand
 }

@@ -41,10 +41,28 @@ const deleteProcat = async (id) => {
   }
 }
 
+const addProductToCategory = async (procatData) => {
+  const response = await axios.put(`${base_url}product/category/addProductToCategory`, procatData)
+
+  if (response.status === 200) {
+    return response.data
+  }
+}
+
+const removeProductFromCategory = async (procatData) => {
+  const response = await axios.put(`${base_url}product/category/removeProductFromCategory`, procatData)
+
+  if (response.status === 200) {
+    return response.data
+  }
+}
+
 export const procatService = {
   getProcat,
   getProcatById,
   createProcat,
   updateProcat,
-  deleteProcat
+  deleteProcat,
+  addProductToCategory,
+  removeProductFromCategory
 }
