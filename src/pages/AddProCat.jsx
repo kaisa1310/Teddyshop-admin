@@ -30,6 +30,9 @@ const AddProcat = () => {
     }
     if (Object.keys(updatedProcat).length > 0) {
       toast.success('Cập nhật thông tin danh mục thành công')
+      setTimeout(() => {
+        navigate('/admin/procat-list')
+      }, 3000)
     }
     if (isError) {
       toast.error('Có lỗi, vui lòng thử lại sau!')
@@ -58,9 +61,6 @@ const AddProcat = () => {
         let tagsValue = values.tags?.split(',').map((tag) => tag.trim())
         dispatch(updateProcat({ id: procatId, ...values, tags: tagsValue }))
         dispatch(resetState())
-        setTimeout(() => {
-          navigate('/admin/procat-list')
-        }, 3000)
       } else {
         let tagsValue = values.tags?.split(',').map((tag) => tag.trim())
         dispatch(createProcat({ ...values, tags: tagsValue }))
@@ -89,9 +89,9 @@ const AddProcat = () => {
         </div>
 
         <div>
-          <span style={{ fontSize: '16px', display: 'block' }}>Mô tả</span>
           <ReactQuill
             theme="snow"
+            placeholder="Mô tả"
             name="description"
             value={formik.values.description}
             onChange={(value) => formik.setFieldValue('description', value)}

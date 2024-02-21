@@ -121,6 +121,9 @@ const AddProduct = () => {
     }
     if (Object.keys(updatedProduct).length > 0) {
       toast.success('Cập nhật sản phẩm thành công')
+      setTimeout(() => {
+        navigate('/admin/product-list')
+      }, 1000)
     }
     if (isError) {
       toast.error('Có lỗi, vui lòng thử lại!')
@@ -167,9 +170,6 @@ const AddProduct = () => {
       if (productId !== undefined) {
         const newTags = values.tags.split(',')
         dispatch(updateProduct({ id: productId, ...values, tags: newTags }))
-        setTimeout(() => {
-          navigate('/admin/product-list')
-        }, 1000)
       } else {
         const newTags = values.tags.split(',')
         const productData = { ...values, tags: newTags, createdBy: userId }
@@ -293,8 +293,8 @@ const AddProduct = () => {
         </div>
 
         <div>
-          <span className="mb-1 d-block">Mô tả</span>
           <ReactQuill
+            placeholder="Mô tả sản phẩm"
             theme="snow"
             name="description"
             value={formik.values.description}

@@ -82,6 +82,9 @@ const AddMember = () => {
     }
     if (Object.keys(updatedMember).length > 0) {
       toast.success('Cập nhật thông tin thành viên thành công')
+      setTimeout(() => {
+        navigate('/admin/manager-staff')
+      }, 1000)
     }
     if (isError) {
       toast.error('Có lỗi, vui lòng thử lại sau!')
@@ -145,9 +148,6 @@ const AddMember = () => {
         }
         dispatch(updateMember(memberData))
         dispatch(resetState())
-        setTimeout(() => {
-          navigate('/admin/manager-staff')
-        }, 3000)
       } else {
         let formattedDate = dayjs(values.startWorkingDate).format('MM/DD/YYYY')
         dispatch(createMember({ ...values, startWorkingDate: formattedDate }))
@@ -202,10 +202,10 @@ const AddMember = () => {
         </div>
 
         <div>
-          <span style={{ fontSize: '16px', display: 'block' }}>Mô tả</span>
           <ReactQuill
             theme="snow"
             name="description"
+            placeholder="Mô tả"
             value={formik.values.description}
             onChange={(value) => formik.setFieldValue('description', value)}
           />

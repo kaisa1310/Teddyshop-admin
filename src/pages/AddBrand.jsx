@@ -67,10 +67,16 @@ const AddBrand = () => {
 
   // toast message
   const newBrand = useSelector((state) => state.brand)
-  const { isSuccess, isError, isLoading, createdBrand, brand } = newBrand
+  const { isSuccess, isError, isLoading, createdBrand, brand, updatedBrand } = newBrand
   useEffect(() => {
     if (Object.keys(createdBrand).length > 0) {
       toast.success('Thêm mới hãng thành công')
+    }
+    if (Object.keys(updatedBrand).length > 0) {
+      toast.success('Cập nhật hãng thành công')
+      setTimeout(() => {
+        navigate('/admin/brand-list')
+      }, 1000)
     }
     if (isError) {
       toast.error('Có lỗi, vui lòng thử lại sau!')
@@ -100,9 +106,6 @@ const AddBrand = () => {
       if (brandId !== undefined) {
         dispatch(updateBrand({ id: brandId, ...values }))
         dispatch(resetState())
-        setTimeout(() => {
-          navigate('/admin/brand-list')
-        }, 1000)
       } else {
         dispatch(createBrand(values))
         dispatch(resetState())
@@ -128,9 +131,9 @@ const AddBrand = () => {
         </div>
 
         <div>
-          <span style={{ fontSize: '16px', display: 'block' }}>Mô tả</span>
           <ReactQuill
             theme="snow"
+            placeholder="Mô tả"
             name="description"
             value={formik.values.description}
             onChange={(value) => formik.setFieldValue('description', value)}

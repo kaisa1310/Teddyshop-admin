@@ -56,6 +56,7 @@ function App() {
           <Route path="blog-edit/:id" element={<AddBlog />} />
           <Route path="event-list" element={<Events />} />
           <Route path="event-add" element={<AddEvent />} />
+          <Route path="event-edit/:id" element={<AddEvent />} />
           <Route path="feedbacks" element={<Feedbacks />} />
         </Route>
       </Routes>

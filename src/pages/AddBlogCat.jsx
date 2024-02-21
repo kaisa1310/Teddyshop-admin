@@ -38,6 +38,9 @@ const AddBlogCat = () => {
     }
     if (Object.keys(updatedBlog).length > 0) {
       toast.success('Cập nhật danh mục thành công')
+      setTimeout(() => {
+        navigate('/admin/blog-category-list')
+      }, 1000)
     }
     if (isError) {
       toast.error('Tạo danh mục thất bại, vui lòng thử lại sau!')
@@ -55,9 +58,6 @@ const AddBlogCat = () => {
       if (blogCatId !== undefined) {
         dispatch(updateBlogCat({ id: blogCatId, ...values }))
         dispatch(resetState())
-        setTimeout(() => {
-          navigate('/admin/blog-category-list')
-        }, 1000)
       } else {
         dispatch(createBlogCat(values))
         dispatch(resetState())
@@ -83,10 +83,10 @@ const AddBlogCat = () => {
         </div>
 
         <div>
-          <span style={{ fontSize: '16px', display: 'block' }}>Mô tả</span>
           <ReactQuill
             theme="snow"
             name="description"
+            placeholder="Mô tả"
             value={formik.values.description}
             onChange={(value) => formik.setFieldValue('description', value)}
           />

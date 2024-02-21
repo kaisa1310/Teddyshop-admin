@@ -82,6 +82,9 @@ const AddBlog = () => {
     }
     if (Object.keys(updatedBlog).length > 0) {
       toast.success('Lưu bài viết thành công')
+      setTimeout(() => {
+        navigate('/admin/blog-list')
+      }, 1000)
     }
     if (isError) {
       toast.error('Có lỗi, vui lòng thử lại!')
@@ -103,9 +106,6 @@ const AddBlog = () => {
         const newValues = { id: getBlogId, ...values, createdBy: userId }
         dispatch(updateBlog(newValues))
         dispatch(resetState())
-        setTimeout(() => {
-          navigate('/admin/blog-list')
-        }, 1000)
       } else {
         const newValues = { ...values, createdBy: userId }
         dispatch(createBlog(newValues))
@@ -154,8 +154,8 @@ const AddBlog = () => {
         </div>
 
         <div>
-          <span style={{ fontSize: '16px', display: 'block' }}>Nội dung</span>
           <ReactQuill
+            placeholder="Nội dung"
             theme="snow"
             name="description"
             value={formik.values.content}
