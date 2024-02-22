@@ -188,6 +188,11 @@ const MainLayout = () => {
                   label: 'Danh sách'
                 },
                 {
+                  key: 'schedules',
+                  icon: <FaClipboardList className="fs-5" />,
+                  label: 'Lịch trình'
+                },
+                {
                   key: 'event-add',
                   icon: <BiAddToQueue className="fs-5" />,
                   label: 'Thêm mới'

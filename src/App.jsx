@@ -23,6 +23,8 @@ import AddBlog from './pages/AddBlog'
 import Events from './pages/Events'
 import AddEvent from './pages/AddEvent'
 import Feedbacks from './pages/Feedbacks'
+import AddSchedule from './pages/AddSchedule'
+import Schedules from './pages/Schedules'
 
 function App() {
   return (
@@ -57,6 +59,9 @@ function App() {
           <Route path="event-list" element={<Events />} />
           <Route path="event-add" element={<AddEvent />} />
           <Route path="event-edit/:id" element={<AddEvent />} />
+          <Route path="schedule-add" element={<AddSchedule />} />
+          <Route path="schedule-edit/:id" element={<AddSchedule />} />
+          <Route path="schedules" element={<Schedules />} />
           <Route path="feedbacks" element={<Feedbacks />} />
         </Route>
       </Routes>

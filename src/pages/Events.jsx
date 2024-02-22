@@ -92,6 +92,9 @@ const Events = () => {
   return (
     <div>
       <h3 className="text-center fs-3">Danh sách sự kiện</h3>
+      <Link to="/admin/schedule-add" className="btn btn-info text-white">
+        Thêm mới lịch trình
+      </Link>
       <Table columns={columns} dataSource={data1} />
       <CustomModal
         open={open}
