@@ -9,6 +9,8 @@ import blogCatSlice from '../features/blogcat/blogcatSlice'
 import blogSlice from '../features/blog/blogSlice'
 import eventSlice from '../features/Event/eventSlice'
 import scheduleSlice from '../features/schedule/scheduleSlice'
+import feedbackSlice from '../features/feedback/feedbackService'
+import orderSlice from '../features/Order/orderSlice'
 
 export const store = configureStore({
   reducer: {
@@ -21,6 +23,8 @@ export const store = configureStore({
     blogCat: blogCatSlice,
     blog: blogSlice,
     event: eventSlice,
-    schedule: scheduleSlice
+    schedule: scheduleSlice,
+    feedback: feedbackSlice,
+    order: orderSlice
   }
 })

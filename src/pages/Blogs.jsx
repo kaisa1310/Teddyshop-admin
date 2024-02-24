@@ -70,13 +70,13 @@ const Blogs = () => {
 
   let data1 = []
 
-  for (let i = 0; i < blogState.length; i++) {
+  for (let i = 0; i < blogState?.length; i++) {
     data1.push({
       key: i + 1,
       name: blogState[i].name,
       category: blogState[i].blogCategory.name,
       tag: blogState[i].tag,
-      author: blogState[i].createdBy.fullName,
+      author: blogState[i]?.createdBy?.fullName || 'Chưa cập nhật',
       view: blogState[i].views,
       action: (
         <div className="d-flex">

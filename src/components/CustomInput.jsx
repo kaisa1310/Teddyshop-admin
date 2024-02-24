@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 
 const CustomInput = (props) => {
-  const { type, label, i_id, i_class, name, onChange, value, onBlur } = props
+  const { type, label, i_id, i_class, name, onChange, value, onBlur, disabled, defaultValue } = props
   return (
     <div className="form-floating mt-3">
       <input
@@ -13,6 +13,8 @@ const CustomInput = (props) => {
         onChange={onChange}
         onBlur={onBlur}
         value={value}
+        disabled={disabled}
+        defaultValue={defaultValue}
       />
       <label htmlFor={i_id}>{label}</label>
     </div>
@@ -27,7 +29,9 @@ CustomInput.propTypes = {
   i_class: PropTypes.string,
   name: PropTypes.string,
   onChange: PropTypes.func,
-  onBlur: PropTypes.func
+  onBlur: PropTypes.func,
+  disabled: PropTypes.bool,
+  defaultValue: PropTypes.string
 }
 
 export default CustomInput

@@ -1,6 +1,10 @@
 import { Table } from 'antd'
 import { Link } from 'react-router-dom'
 import { FcViewDetails } from 'react-icons/fc'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { resetState, getFeedbacks } from '../features/feedback/feedbackService'
+import dayjs from 'dayjs'
 
 const columns = [
   {
@@ -33,20 +37,30 @@ const columns = [
     dataIndex: 'action'
   }
 ]
-let data1 = []
 
 const Feedbacks = () => {
-  for (let i = 0; i < 20; i++) {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(resetState())
+    dispatch(getFeedbacks())
+  }, [])
+
+  const feedbackState = useSelector((state) => state.feedback?.feedbacks)
+
+  let data1 = []
+
+  for (let i = 0; i < feedbackState?.length; i++) {
     data1.push({
       key: i + 1,
-      name: 'Nguyễn Quang Huy',
-      email: 'huynqph37225@fpt.edu.vn',
-      content: 'Sản phẩm rất tốt !!',
-      time: '2021-10-10',
-      status: 'Đã phản hồi',
+      name: feedbackState[i].fullName,
+      email: feedbackState[i].email,
+      content: feedbackState[i].content,
+      time: dayjs(feedbackState[i].submitDate).format('DD/MM/YYYY'),
+      status: feedbackState[i].status,
       action: (
         <div className="d-flex">
-          <Link to={``} className=" fs-3 text-warning">
+          <Link to={`/admin/update-status/${feedbackState[i]._id}`} className=" fs-3 text-warning">
             <FcViewDetails />
           </Link>
         </div>

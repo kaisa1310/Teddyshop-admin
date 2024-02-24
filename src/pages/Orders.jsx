@@ -1,9 +1,11 @@
 import { Table } from 'antd'
-import { useState } from 'react'
-import { AiFillDelete } from 'react-icons/ai'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FcViewDetails } from 'react-icons/fc'
-import CustomModal from '../components/CustomModal'
+import { useDispatch, useSelector } from 'react-redux'
+import { getAllOrder, resetState } from '../features/Order/orderSlice'
+import dayjs from 'dayjs'
+import { Select } from 'antd'
 
 const columns = [
   {
@@ -39,37 +41,52 @@ const columns = [
     dataIndex: 'action'
   }
 ]
-let data1 = []
+
+const statusOptions = [
+  { label: 'Chờ xác nhận', value: 'Chờ xác nhận' },
+  { label: 'Đã xác nhận', value: 'Đã xác nhận' },
+  { label: 'Đang giao hàng', value: 'Đang giao hàng' },
+  { label: 'Đã giao hàng', value: 'Đã giao hàng' },
+  { label: 'Giao hàng thành công', value: 'Giao hàng thành công' }
+]
 
 const Orders = () => {
-  const [open, setOpen] = useState(false)
+  const dispatch = useDispatch()
+  const [orderStatus, setOrderStatus] = useState('')
 
-  const hideModal = () => {
-    setOpen(!open)
+  const handleChangeStatus = (value) => {
+    setOrderStatus(value)
   }
 
-  const deleteOrder = () => {
-    // do something
-    setOpen(!open)
+  const filterOption = (input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+
+  useEffect(() => {
+    dispatch(resetState())
+    dispatch(getAllOrder())
+  }, [])
+
+  const handleGetOrder = () => {
+    dispatch(getAllOrder({ status: orderStatus }))
   }
 
-  for (let i = 0; i < 10; i++) {
+  const orderState = useSelector((state) => state.order?.orders)
+
+  let data1 = []
+
+  for (let i = 0; i < orderState?.length; i++) {
     data1.push({
       key: i + 1,
-      name: 'Nguyễn Quang Huy',
-      product: 'Laptop Dell Inspiron 15 3501',
-      quantity: 1,
-      total: '20.000.000',
-      status: 'Đã giao hàng',
-      date: '20/10/2021',
+      name: orderState[i]?.shippingInfo?.fullName,
+      product: orderState[i]?.orderItems?.map((item) => item?.product?.name),
+      quantity: orderState[i]?.orderItems?.map((item) => item?.quantity),
+      total: orderState[i]?.totalPrice,
+      status: orderState[i]?.orderStatus,
+      date: dayjs(orderState[i].orderDate).format('DD/MM/YYYY HH:mm:ss'),
       action: (
         <div className="d-flex">
-          <Link to={``} className=" fs-3 text-warning">
+          <Link to={`/admin/update-status/${orderState[i]._id}`} className=" fs-3 text-warning">
             <FcViewDetails />
           </Link>
-          <button className="ms-3 fs-3 text-danger bg-transparent border-0" onClick={() => setOpen(!open)}>
-            <AiFillDelete />
-          </button>
         </div>
       )
     })
@@ -78,15 +95,21 @@ const Orders = () => {
   return (
     <div>
       <h3 className="text-center fs-3">Danh sách đơn hàng</h3>
+      <form>
+        <Select
+          showSearch
+          placeholder="Chọn trạng thái đơn hàng"
+          optionFilterProp="children"
+          onChange={handleChangeStatus}
+          filterOption={filterOption}
+          options={statusOptions}
+          style={{ width: 200, height: 40, marginBottom: 20 }}
+        />
+        <button type="button" className="btn btn-primary mx-2" onClick={handleGetOrder}>
+          Lọc đơn hàng
+        </button>
+      </form>
       <Table columns={columns} dataSource={data1} />
-      <CustomModal
-        open={open}
-        hideModal={hideModal}
-        performAction={() => {
-          deleteOrder()
-        }}
-        content="Bạn có đơn hàng này không ?"
-      />
     </div>
   )
 }

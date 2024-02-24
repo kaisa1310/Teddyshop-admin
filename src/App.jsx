@@ -25,6 +25,7 @@ import AddEvent from './pages/AddEvent'
 import Feedbacks from './pages/Feedbacks'
 import AddSchedule from './pages/AddSchedule'
 import Schedules from './pages/Schedules'
+import UpdateStatus from './pages/UpdateStatus'
 
 function App() {
   return (
@@ -63,6 +64,7 @@ function App() {
           <Route path="schedule-edit/:id" element={<AddSchedule />} />
           <Route path="schedules" element={<Schedules />} />
           <Route path="feedbacks" element={<Feedbacks />} />
+          <Route path="update-status/:id" element={<UpdateStatus />} />
         </Route>
       </Routes>
     </Router>
