@@ -34,7 +34,8 @@ const schema = Yup.object().shape({
   endDate: Yup.date(),
   tag: Yup.string().required('Vui lòng nhập tag'),
   description: Yup.string().required('Vui lòng nhập mô tả sự kiện'),
-  type: Yup.string().required('Vui lòng chọn loại sự kiện')
+  type: Yup.string().required('Vui lòng chọn loại sự kiện'),
+  title: Yup.string().required('Vui lòng nhập tiêu đề cho sự kiện')
 })
 
 const AddEvent = () => {
@@ -138,7 +139,8 @@ const AddEvent = () => {
       endDate: event.endDate || '',
       tag: event.tag || '',
       description: event.description || '',
-      type: event.type || ''
+      type: event.type || '',
+      title: event.title || ''
     },
     validationSchema: schema,
     onSubmit: (values) => {
@@ -172,12 +174,15 @@ const AddEvent = () => {
           members: values.members,
           createdBy: userId,
           type: values.type,
+          title: values.title,
           id: eventId
         }
         dispatch(createEvent(eventData))
         console.log(eventData)
         formik.resetForm()
         setTimeout(() => {
+          // dispatch(resetState())
+          dispatch(getMembers())
           dispatch(resetUpdateFile())
         }, 2000)
       }
@@ -198,6 +203,18 @@ const AddEvent = () => {
             onBlur={formik.handleBlur('name')}
           />
           {formik.touched.name && formik.errors.name ? <div className="text-error">{formik.errors.name}</div> : null}
+        </div>
+
+        <div>
+          <CustomInput
+            label="Tiêu đề của sự kiện"
+            name="name"
+            type="text"
+            value={formik.values.title}
+            onChange={formik.handleChange('title')}
+            onBlur={formik.handleBlur('title')}
+          />
+          {formik.touched.title && formik.errors.title ? <div className="text-error">{formik.errors.title}</div> : null}
         </div>
 
         <div>
@@ -341,7 +358,9 @@ const AddEvent = () => {
             })}
         </div>
 
-        <button className="btn btn-primary w-25">{eventId ? 'Lưu' : 'Thêm sự'} sự kiện</button>
+        <button type="submit" className="btn btn-primary w-25">
+          {eventId ? 'Lưu' : 'Thêm sự'} sự kiện
+        </button>
       </form>
     </div>
   )

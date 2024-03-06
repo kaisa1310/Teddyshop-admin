@@ -128,6 +128,11 @@ const MainLayout = () => {
                   key: 'product-add',
                   icon: <BiAddToQueue className="fs-5" />,
                   label: 'Thêm mới'
+                },
+                {
+                  key: 'product-add-price',
+                  icon: <BiAddToQueue className="fs-5" />,
+                  label: 'Thêm giá cho sản phẩm'
                 }
               ]
             },

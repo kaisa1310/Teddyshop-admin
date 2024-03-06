@@ -43,7 +43,8 @@ export const createEvent = createAsyncThunk('event/createEvent', async (eventDat
       tag: eventData?.tag,
       members: eventData?.members,
       createdBy: eventData?.createdBy,
-      type: eventData?.type
+      type: eventData?.type,
+      title: eventData?.title
     })
   } catch (error) {
     return thunkAPI.rejectWithValue(error)
@@ -51,6 +52,7 @@ export const createEvent = createAsyncThunk('event/createEvent', async (eventDat
 })
 
 export const updateEvent = createAsyncThunk('event/updateEvent', async (eventData, thunkAPI) => {
+  console.log(eventData)
   try {
     return await eventService.updateEvent(eventData.id, {
       name: eventData?.name,
@@ -62,7 +64,9 @@ export const updateEvent = createAsyncThunk('event/updateEvent', async (eventDat
       images: eventData?.images,
       tag: eventData?.tag,
       members: eventData?.members,
-      type: eventData?.type
+      createdBy: eventData?.createdBy,
+      type: eventData?.type,
+      title: eventData?.title
     })
   } catch (error) {
     return thunkAPI.rejectWithValue(error)

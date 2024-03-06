@@ -26,6 +26,7 @@ import Feedbacks from './pages/Feedbacks'
 import AddSchedule from './pages/AddSchedule'
 import Schedules from './pages/Schedules'
 import UpdateStatus from './pages/UpdateStatus'
+import AddPriceProduct from './pages/AddPriceProduct'
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
           <Route path="brand-edit/:id" element={<AddBrand />} />
           <Route path="product-list" element={<Products />} />
           <Route path="product-add" element={<AddProduct />} />
+          <Route path="product-add-price" element={<AddPriceProduct />} />
           <Route path="product-edit/:id" element={<AddProduct />} />
           <Route path="procat-list" element={<ProcatList />} />
           <Route path="procat-add" element={<AddProcat />} />
