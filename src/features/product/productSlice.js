@@ -8,12 +8,6 @@ const initialState = {
   updatedProduct: {},
   deletedProduct: {},
 
-  prices: [],
-  price: {},
-  createdPrice: {},
-  updatedPrice: {},
-  deletedPrice: {},
-
   isError: false,
   isLoading: false,
   isSuccess: false,
@@ -50,7 +44,11 @@ export const createProduct = createAsyncThunk('product/createProduct', async (pr
       category: productData?.category,
       images: productData?.images,
       tags: productData?.tags,
-      createdBy: productData?.createdBy
+      createdBy: productData?.createdBy,
+      colors: productData?.colors,
+      options: productData?.options,
+      types: productData?.types,
+      attributes: productData?.attributes
     })
   } catch (error) {
     return thunkAPI.rejectWithValue(error)
@@ -70,7 +68,24 @@ export const updateProduct = createAsyncThunk('product/updateProduct', async (pr
       brand: productData?.brand,
       category: productData?.category,
       images: productData?.images,
-      tags: productData?.tags
+      tags: productData?.tags,
+      colors: productData?.colors,
+      options: productData?.options,
+      types: productData?.types
+    })
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error)
+  }
+})
+
+export const updateProductPrice = createAsyncThunk('product/updateProductPrice', async (productData, thunkAPI) => {
+  try {
+    return await productService.updateProductPrice(productData.id, {
+      price: productData?.price,
+      quantity: productData?.quantity,
+      option: productData?.option,
+      color: productData?.color,
+      switch: productData?.type
     })
   } catch (error) {
     return thunkAPI.rejectWithValue(error)
@@ -85,24 +100,9 @@ export const deleteProduct = createAsyncThunk('product/deleteProduct', async (id
   }
 })
 
-export const addPriceToProduct = createAsyncThunk('product/addPrice', async (priceData, thunkAPI) => {
+export const deleteProductPrice = createAsyncThunk('product/deleteProductPrice', async (productData, thunkAPI) => {
   try {
-    return await productService.addPriceToProduct({
-      productId: priceData.productId,
-      price: priceData.price,
-      quantity: priceData.quantity,
-      color: priceData?.color,
-      type: priceData?.type,
-      size: priceData?.type
-    })
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error)
-  }
-})
-
-export const getPriceByProductId = createAsyncThunk('product/getPriceByProductId', async (productId, thunkAPI) => {
-  try {
-    return await productService.getPriceByProductId(productId)
+    return await productService.deleteProductPrice(productData.productId, productData.attributesId)
   } catch (error) {
     return thunkAPI.rejectWithValue(error)
   }
@@ -164,6 +164,18 @@ export const productSlice = createSlice({
       .addCase(updateProduct.rejected, (state) => {
         state.isError = true
       })
+      .addCase(updateProductPrice.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(updateProductPrice.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.isError = false
+        state.product = action.payload
+      })
+      .addCase(updateProductPrice.rejected, (state) => {
+        state.isError = true
+      })
       .addCase(deleteProduct.pending, (state) => {
         state.isLoading = true
       })
@@ -176,29 +188,16 @@ export const productSlice = createSlice({
       .addCase(deleteProduct.rejected, (state) => {
         state.isError = true
       })
-      .addCase(addPriceToProduct.pending, (state) => {
+      .addCase(deleteProductPrice.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(addPriceToProduct.fulfilled, (state, action) => {
+      .addCase(deleteProductPrice.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
         state.isError = false
-        state.createdPrice = action.payload.price
-        state.message = action.payload.message
+        state.product = action.payload
       })
-      .addCase(addPriceToProduct.rejected, (state) => {
-        state.isError = true
-      })
-      .addCase(getPriceByProductId.pending, (state) => {
-        state.isLoading = true
-      })
-      .addCase(getPriceByProductId.fulfilled, (state, action) => {
-        state.isLoading = false
-        state.isSuccess = true
-        state.isError = false
-        state.prices = action.payload.prices
-      })
-      .addCase(getPriceByProductId.rejected, (state) => {
+      .addCase(deleteProductPrice.rejected, (state) => {
         state.isError = true
       })
       .addCase(resetState, () => initialState)

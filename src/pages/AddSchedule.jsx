@@ -123,6 +123,7 @@ const AddSchedule = () => {
         dispatch(createSchedule(scheduleValue))
         dispatch(resetState())
         formik.resetForm()
+        dispatch(getEvents())
       }
     }
   })

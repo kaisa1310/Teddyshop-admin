@@ -75,7 +75,7 @@ export const blogCatSlice = createSlice({
         state.isLoading = false
         state.isSuccess = true
         state.isError = false
-        state.blogCats = action.payload.productCategories
+        state.blogCats = action.payload.blogCategories
       })
       .addCase(getBlogCats.rejected, (state) => {
         state.isError = true
@@ -99,7 +99,7 @@ export const blogCatSlice = createSlice({
         state.isLoading = false
         state.isSuccess = true
         state.isError = false
-        state.createdBlog = action.payload.productCat
+        state.createdBlog = action.payload.blogCat
       })
       .addCase(createBlogCat.rejected, (state) => {
         state.isError = true
