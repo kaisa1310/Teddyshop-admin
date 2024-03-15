@@ -63,7 +63,7 @@ const Login = () => {
               <div className="text-error">{formik.errors.email}</div>
             ) : null}
           </div>
-          <div className="">
+          <div className="mt-3">
             <CustomInput
               name="password"
               type="password"

@@ -174,6 +174,7 @@ const AddProduct = () => {
       if (productId !== undefined) {
         const newTags = values.tags.split(',')
         dispatch(updateProduct({ id: productId, ...values, tags: newTags }))
+        console.log(values)
       } else {
         const newTags = values.tags.split(',')
         dispatch(createProduct({ ...values, tags: newTags, createdBy: userId }))

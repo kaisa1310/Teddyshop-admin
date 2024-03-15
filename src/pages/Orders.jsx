@@ -73,18 +73,20 @@ const Orders = () => {
 
   let data1 = []
 
+  console.log(orderState)
+
   for (let i = 0; i < orderState?.length; i++) {
     data1.push({
       key: i + 1,
       name: orderState[i]?.shippingInfo?.fullName,
-      product: orderState[i]?.orderItems?.map((item) => item?.product?.name),
-      quantity: orderState[i]?.orderItems?.map((item) => item?.quantity),
+      product: orderState[i]?.orderItems?.map((item, index) => <li key={index}>{item?.product?.name}</li>),
+      quantity: orderState[i]?.orderItems?.map((item, index) => <li key={index}>Số lượng: {item?.quantity}</li>),
       total: orderState[i]?.totalPrice,
       status: orderState[i]?.orderStatus,
       date: dayjs(orderState[i].orderDate).format('DD/MM/YYYY HH:mm:ss'),
       action: (
         <div className="d-flex">
-          <Link to={`/admin/update-status/${orderState[i]._id}`} className=" fs-3 text-warning">
+          <Link to={`/admin/order-update/${orderState[i]._id}`} className=" fs-3 text-warning">
             <FcViewDetails />
           </Link>
         </div>

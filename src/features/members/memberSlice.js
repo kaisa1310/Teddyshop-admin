@@ -9,6 +9,12 @@ const initialState = {
   createdMember: {},
   updatedMember: {},
   deletedMember: {},
+
+  deletedUser: {},
+  blockUser: {},
+  unBlockUser: {},
+
+  updatedRole: {},
   isError: false,
   isLoading: false,
   isSuccess: false,
@@ -16,9 +22,9 @@ const initialState = {
   message: ''
 }
 
-export const getUsers = createAsyncThunk('member/getUsers', async (thunkAPI) => {
+export const getUsers = createAsyncThunk('member/getUsers', async (email, thunkAPI) => {
   try {
-    return await memberService.getUsers()
+    return await memberService.getUsers(email)
   } catch (error) {
     return thunkAPI.rejectWithValue(error)
   }
@@ -27,6 +33,39 @@ export const getUsers = createAsyncThunk('member/getUsers', async (thunkAPI) => 
 export const getAdmins = createAsyncThunk('member/getAdmins', async (thunkAPI) => {
   try {
     return await memberService.getAdmins()
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error)
+  }
+})
+
+export const grantAdminPermissionByEmail = createAsyncThunk('member/updateRole', async (data, thunkAPI) => {
+  try {
+    console.log(data)
+    return await memberService.grantAdminPermissionByEmail({ email: data.email })
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error)
+  }
+})
+
+export const deleteUser = createAsyncThunk('member/deleteUser', async (userId, thunkAPI) => {
+  try {
+    return await memberService.deleteUserById(userId)
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error)
+  }
+})
+
+export const blockUser = createAsyncThunk('member/blockUser', async (userId, thunkAPI) => {
+  try {
+    return await memberService.blockUser(userId)
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error)
+  }
+})
+
+export const unBlockUser = createAsyncThunk('member/unBlockUser', async (userId, thunkAPI) => {
+  try {
+    return await memberService.unBlockUser(userId)
   } catch (error) {
     return thunkAPI.rejectWithValue(error)
   }
@@ -121,6 +160,55 @@ export const memberSlice = createSlice({
         state.admins = action.payload
       })
       .addCase(getAdmins.rejected, (state) => {
+        state.isError = true
+      })
+      .addCase(grantAdminPermissionByEmail.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(grantAdminPermissionByEmail.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.isError = false
+        state.updatedRole = action.payload.updatedRole
+        state.message = action.payload.message
+      })
+      .addCase(grantAdminPermissionByEmail.rejected, (state) => {
+        state.isError = true
+      })
+      .addCase(deleteUser.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(deleteUser.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.isError = false
+        state.deletedMember = action.payload.userDeleted
+      })
+      .addCase(deleteUser.rejected, (state) => {
+        state.isError = true
+      })
+      .addCase(blockUser.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(blockUser.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.isError = false
+        state.blockUser = action.payload.userBlocked
+      })
+      .addCase(blockUser.rejected, (state) => {
+        state.isError = true
+      })
+      .addCase(unBlockUser.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(unBlockUser.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.isError = false
+        state.unBlockUser = action.payload.userUnBlocked
+      })
+      .addCase(unBlockUser.rejected, (state) => {
         state.isError = true
       })
       .addCase(getMembers.pending, (state) => {

@@ -27,6 +27,7 @@ import AddSchedule from './pages/AddSchedule'
 import Schedules from './pages/Schedules'
 import UpdateStatus from './pages/UpdateStatus'
 import AddPriceProduct from './pages/AddPriceProduct'
+import UpdateOrderStatus from './pages/UpdateOrderStatus'
 
 function App() {
   return (
@@ -53,6 +54,7 @@ function App() {
           <Route path="procat-add" element={<AddProcat />} />
           <Route path="procat-edit/:id" element={<AddProcat />} />
           <Route path="order-list" element={<Orders />} />
+          <Route path="order-update/:id" element={<UpdateOrderStatus />} />
           <Route path="blog-category-list" element={<BlogCatList />} />
           <Route path="blog-category-add" element={<AddBlogCat />} />
           <Route path="blog-category-edit/:id" element={<AddBlogCat />} />
