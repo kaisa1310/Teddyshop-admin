@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { getOrderById, resetState, updateStatus } from '../features/Order/orderSlice'
 import dayjs from 'dayjs'
 import { toast } from 'react-toastify'
+import { Table } from 'antd'
 
 const filteredOptions = [
   { label: 'Chờ xác nhận', value: 'Chờ xác nhận' },
@@ -12,6 +13,33 @@ const filteredOptions = [
   { label: 'Đang giao hàng', value: 'Đang giao hàng' },
   { label: 'Đã giao hàng', value: 'Đã giao hàng' },
   { label: 'Giao hàng thành công', value: 'Giao hàng thành công' }
+]
+
+const columns = [
+  {
+    title: 'Tên sản phẩm',
+    dataIndex: 'name'
+  },
+  {
+    title: 'Màu sắc',
+    dataIndex: 'color'
+  },
+  {
+    title: 'Kiểu switch',
+    dataIndex: 'switch'
+  },
+  {
+    title: 'Loại',
+    dataIndex: 'option'
+  },
+  {
+    title: 'Số lượng',
+    dataIndex: 'quantity'
+  },
+  {
+    title: 'Giá',
+    dataIndex: 'price'
+  }
 ]
 
 const UpdateOrderStatus = () => {
@@ -46,6 +74,20 @@ const UpdateOrderStatus = () => {
     updatedAt
   } = orderState.order
 
+  const data = []
+
+  for (let i = 0; i < orderItems?.length; i++) {
+    data.push({
+      key: i + 1,
+      name: orderItems[i]?.product?.name,
+      color: orderItems[i]?.color || 'No color',
+      switch: orderItems[i]?.switch || 'No switch',
+      option: orderItems[i]?.option || 'No option',
+      quantity: orderItems[i].quantity,
+      price: orderItems[i].price
+    })
+  }
+
   const handleUpdateOrderStatus = () => {
     if (statusOrder !== '' && getOrderId) {
       dispatch(updateStatus({ id: getOrderId, status: statusOrder }))
@@ -77,47 +119,31 @@ const UpdateOrderStatus = () => {
             }}
             options={filteredOptions}
             optionLabelProp="label"
-            // value={statusOrder ? statusOrder : orderState}
+            value={orderStatus ? orderStatus : orderState}
             onChange={setStatusOrder}
           />
         </div>
         <div className="">
           <div style={{ border: '1px solid #ccc', padding: '20px', marginBottom: '20px', borderRadius: '4px' }}>
             <h5 style={{ marginBottom: '10px' }}>Thông tin giao hàng</h5>
-            <p style={{ marginBottom: '5px' }}>Họ và tên: {shippingInfo?.fullName}</p>
-            <p style={{ marginBottom: '5px' }}>Địa chỉ: {shippingInfo?.address}</p>
-            <p style={{ marginBottom: '5px' }}>Thành phố: {shippingInfo?.city}</p>
-            <p style={{ marginBottom: '5px' }}>Số điện thoại: {shippingInfo?.phoneNumber}</p>
+            <p style={{ marginBottom: '5px' }}>
+              Họ và tên: <strong>{shippingInfo?.fullName}</strong>
+            </p>
+            <p style={{ marginBottom: '5px' }}>
+              Địa chỉ: <strong>{shippingInfo?.location}</strong>
+            </p>
+            <p style={{ marginBottom: '5px' }}>
+              Thành phố: <strong>{shippingInfo?.city}</strong>
+            </p>
+            <p style={{ marginBottom: '5px' }}>
+              Số điện thoại: <strong>{shippingInfo?.phoneNumber}</strong>
+            </p>
           </div>
 
           <div style={{ border: '1px solid #ccc', padding: '20px', marginBottom: '20px', borderRadius: '4px' }}>
             <h5 style={{ marginBottom: '10px' }}>Sản phẩm đặt hàng</h5>
-            <table style={{ width: '100%', marginBottom: '10px' }}>
-              <thead>
-                <tr>
-                  <th>Sản phẩm</th>
-                  <th>Màu sắc</th>
-                  <th>Loại</th>
-                  <th>Số lượng</th>
-                  <th>Giá</th>
-                </tr>
-              </thead>
-              <tbody>
-                {orderItems &&
-                  orderItems.length > 0 &&
-                  orderItems?.map((order) => {
-                    return (
-                      <tr key={order._id}>
-                        <td>{order.product.name}</td>
-                        <td>{order.color}</td>
-                        <td>{order.type}</td>
-                        <td>{order.quantity}</td>
-                        <td>{order.price}</td>
-                      </tr>
-                    )
-                  })}
-              </tbody>
-            </table>
+            <Table columns={columns} dataSource={data} pagination={false} />
+            <p className="fs-4 mb-0 mt-2 text-primary">Tổng đơn hàng: {totalPrice}</p>
           </div>
 
           <div style={{ border: '1px solid #ccc', padding: '20px', marginBottom: '20px', borderRadius: '4px' }}>

@@ -5,6 +5,7 @@ import { deleteProductPrice, getProductById, getProducts, updateProductPrice } f
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import CustomModal from '../components/CustomModal'
+import CustomInput from '../components/CustomInput'
 
 const schema = Yup.object().shape({
   price: Yup.number().required('Vui lòng nhập giá sản phẩm'),
@@ -88,8 +89,10 @@ const AddPriceProduct = () => {
         id: productId
       }
       dispatch(updateProductPrice(newProductData))
-      dispatch(getProductById(productId))
       formik.resetForm()
+      setTimeout(() => {
+        dispatch(getProductById(productId))
+      }, 1000)
     }
   })
 
@@ -182,38 +185,43 @@ const AddPriceProduct = () => {
       <Collapse>
         <Collapse.Panel header="Bảng giá của sản phẩm">
           <div className="d-flex flex-column gap-3">
-            {Object.keys(productState).length > 0 &&
-              productState.attributes?.map((attr, index) => {
+            {productState?.attributes?.length > 0 &&
+              productState?.attributes?.map((attr, index) => {
                 return (
                   <div className="d-flex align-items-center gap-3" key={index}>
-                    <Select
-                      showSearch
-                      optionFilterProp="children"
-                      placeholder="Màu sản phẩm"
-                      style={{ width: '300px', fontSize: '16px', height: '50px' }}
-                      options={colorsData}
-                      value={attr.color.code}
-                    />
-                    <Select
-                      showSearch
-                      optionFilterProp="children"
-                      placeholder="Switch sản phẩm"
-                      style={{ width: '300px', fontSize: '16px', height: '50px' }}
-                      options={switchData}
-                      value={attr.switch.code}
-                    />
+                    {attr?.color && (
+                      <Select
+                        showSearch
+                        optionFilterProp="children"
+                        placeholder="Màu sản phẩm"
+                        style={{ width: '300px', fontSize: '16px', height: '55px' }}
+                        options={colorsData}
+                        value={attr?.color?.code}
+                      />
+                    )}
+                    {attr?.switch && (
+                      <Select
+                        showSearch
+                        optionFilterProp="children"
+                        placeholder="Switch sản phẩm"
+                        style={{ width: '300px', fontSize: '16px', height: '55px' }}
+                        options={switchData}
+                        value={attr?.switch?.code}
+                      />
+                    )}
 
-                    <Select
-                      showSearch
-                      optionFilterProp="children"
-                      placeholder="Các options sản phẩm"
-                      style={{ width: '300px', fontSize: '16px', height: '50px' }}
-                      options={optionsData}
-                      value={attr?.option?.code}
-                    />
-                    <InputNumber
-                      placeholder="Số lượng"
-                      min={0}
+                    {attr?.option && (
+                      <Select
+                        showSearch
+                        optionFilterProp="children"
+                        placeholder="Các options sản phẩm"
+                        style={{ width: '300px', fontSize: '16px', height: '55px' }}
+                        options={optionsData}
+                        value={attr?.option?.code}
+                      />
+                    )}
+                    <CustomInput
+                      label="Số lượng"
                       style={{
                         width: '300px',
                         fontSize: '16px',
@@ -223,11 +231,11 @@ const AddPriceProduct = () => {
                         alignItems: 'center',
                         justifyContent: 'flex-start'
                       }}
-                      value={attr.quantity}
+                      disabled
+                      value={attr?.quantity}
                     />
-                    <InputNumber
-                      placeholder="Giá sản phẩm"
-                      min={0}
+                    <CustomInput
+                      label="Giá sản phẩm"
                       style={{
                         width: '300px',
                         fontSize: '16px',
@@ -237,9 +245,10 @@ const AddPriceProduct = () => {
                         alignItems: 'center',
                         justifyContent: 'flex-start'
                       }}
-                      value={attr.price}
+                      disabled
+                      value={attr?.price}
                     />
-                    <button className="btn btn-danger" onClick={() => showModal(attr._id)}>
+                    <button className="btn btn-danger" onClick={() => showModal(attr?._id)}>
                       Xóa
                     </button>
                   </div>
