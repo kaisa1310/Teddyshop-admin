@@ -47,7 +47,7 @@ const statusOptions = [
   { label: 'Đã xác nhận', value: 'Đã xác nhận' },
   { label: 'Đang giao hàng', value: 'Đang giao hàng' },
   { label: 'Đã giao hàng', value: 'Đã giao hàng' },
-  { label: 'Giao hàng thành công', value: 'Giao hàng thành công' }
+  { label: 'Đã hủy', value: 'Đã hủy' }
 ]
 
 const Orders = () => {
@@ -72,8 +72,6 @@ const Orders = () => {
   const orderState = useSelector((state) => state.order?.orders)
 
   let data1 = []
-
-  console.log(orderState)
 
   for (let i = 0; i < orderState?.length; i++) {
     data1.push({

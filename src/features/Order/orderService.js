@@ -44,8 +44,17 @@ const updateStatus = async (orderData) => {
   }
 }
 
+const updateOrderWhenUserBySuccess = async (orderData) => {
+  const response = await axios.put(`${base_url}product/buy`, { orderData: orderData })
+
+  if (response.status === 200) {
+    return response.data
+  }
+}
+
 export const orderService = {
   getAllOrder,
   updateStatus,
-  getOrderById
+  getOrderById,
+  updateOrderWhenUserBySuccess
 }

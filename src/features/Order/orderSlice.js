@@ -36,6 +36,14 @@ export const getOrderById = createAsyncThunk('order/getOrderById', async (orderI
   }
 })
 
+export const updateOrderWhenUserBySuccess = createAsyncThunk('order/buySuccess', async (orderData, thunkAPI) => {
+  try {
+    return await orderService.updateOrderWhenUserBySuccess(orderData)
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error)
+  }
+})
+
 export const resetState = createAction('ReverAll')
 
 const orderSlice = createSlice({
@@ -77,6 +85,18 @@ const orderSlice = createSlice({
         state.order = action.payload.order
       })
       .addCase(getOrderById.rejected, (state) => {
+        state.isLoading = false
+        state.isError = true
+      })
+      .addCase(updateOrderWhenUserBySuccess.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(updateOrderWhenUserBySuccess.fulfilled, (state) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.isError = false
+      })
+      .addCase(updateOrderWhenUserBySuccess.rejected, (state) => {
         state.isLoading = false
         state.isError = true
       })

@@ -2,7 +2,7 @@ import { Select } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { getOrderById, resetState, updateStatus } from '../features/Order/orderSlice'
+import { getOrderById, resetState, updateOrderWhenUserBySuccess, updateStatus } from '../features/Order/orderSlice'
 import dayjs from 'dayjs'
 import { toast } from 'react-toastify'
 import { Table } from 'antd'
@@ -11,8 +11,7 @@ const filteredOptions = [
   { label: 'Chờ xác nhận', value: 'Chờ xác nhận' },
   { label: 'Đã xác nhận', value: 'Đã xác nhận' },
   { label: 'Đang giao hàng', value: 'Đang giao hàng' },
-  { label: 'Đã giao hàng', value: 'Đã giao hàng' },
-  { label: 'Giao hàng thành công', value: 'Giao hàng thành công' }
+  { label: 'Đã giao hàng', value: 'Đã giao hàng' }
 ]
 
 const columns = [
@@ -80,19 +79,38 @@ const UpdateOrderStatus = () => {
     data.push({
       key: i + 1,
       name: orderItems[i]?.product?.name,
-      color: orderItems[i]?.color || 'No color',
-      switch: orderItems[i]?.switch || 'No switch',
-      option: orderItems[i]?.option || 'No option',
+      color: orderItems[i]?.color.name || 'No color',
+      switch: orderItems[i]?.switch.name || 'No switch',
+      option: orderItems[i]?.option.name || 'No option',
       quantity: orderItems[i].quantity,
       price: orderItems[i].price
+    })
+  }
+
+  const newOrderData = []
+  for (let i = 0; i < orderItems?.length; i++) {
+    newOrderData.push({
+      productId: orderItems[i]?.product?._id,
+      quantity: orderItems[i].quantity,
+      color: {
+        code: orderItems[i]?.color?.code
+      },
+      switch: {
+        code: orderItems[i]?.switch?.code
+      },
+      option: {
+        code: orderItems[i]?.option?.code
+      },
+      attributeId: orderItems[i]?.attributeId
     })
   }
 
   const handleUpdateOrderStatus = () => {
     if (statusOrder !== '' && getOrderId) {
       dispatch(updateStatus({ id: getOrderId, status: statusOrder }))
-    } else {
-      toast.warning('Bạn hãy kiểm tra lại thông tin, và thử lại!')
+      if (statusOrder === 'Đã giao hàng') {
+        dispatch(updateOrderWhenUserBySuccess(newOrderData))
+      }
     }
   }
 
@@ -119,7 +137,7 @@ const UpdateOrderStatus = () => {
             }}
             options={filteredOptions}
             optionLabelProp="label"
-            value={orderStatus ? orderStatus : orderState}
+            // value={orderStatus ? orderStatus : orderState}
             onChange={setStatusOrder}
           />
         </div>
