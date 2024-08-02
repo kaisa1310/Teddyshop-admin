@@ -17,16 +17,16 @@ const getBrandById = async (id) => {
   }
 }
 
-const createBrand = async (procatData) => {
-  const response = await axios.post(`${base_url}brand/`, procatData)
+const createBrand = async (brandData) => {
+  const response = await axios.post(`${base_url}brand/`, brandData)
 
   if (response.status === 200) {
     return response.data
   }
 }
 
-const updateBrand = async (id, procatData) => {
-  const response = await axios.put(`${base_url}brand/${id}`, procatData)
+const updateBrand = async (id, brandData) => {
+  const response = await axios.put(`${base_url}brand/${id}`, brandData)
 
   if (response.status === 200) {
     return response.data
